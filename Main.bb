@@ -10842,9 +10842,10 @@ Function Use294()
 
 					strtemp$ = GetINIString2(iniStr, loc, "dispensesound")
 					If strtemp="" Then
-						PlayerRoom\SoundCHN = PlaySound_Strict (LoadTempSound("SFX\SCP\294\dispense1.ogg"))
-					Else
 						PlayerRoom\SoundCHN = PlaySound_Strict (LoadTempSound(strtemp))
+					EndIf
+					If PlayerRoom\SoundCHN=0 Then
+						PlayerRoom\SoundCHN = PlaySound_Strict (LoadTempSound("SFX\SCP\294\dispense1.ogg"))
 					EndIf
 					
 					If GetINIInt2(iniStr, loc, "explosion")=True Then 
