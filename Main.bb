@@ -261,7 +261,7 @@ End Function
 
 SetBuffer(BackBuffer())
 
-Global CurTime%, PrevTime%, LoopDelay%, FPSfactor#, FPSfactor2#, PrevFPSFactor#
+Global CurTime%, PrevTime%, LoopDelay%, AccumulatedLoopDelay#, FPSfactor#, FPSfactor2#, PrevFPSFactor#
 Local CheckFPS%, ElapsedLoops%, FPS%
 
 Global Framelimit% = GetOptionInt("graphics", "framelimit")
@@ -3100,6 +3100,7 @@ FlushMouse()
 DrawLoading(100, True)
 
 LoopDelay = MilliSecs()
+AccumulatedLoopDelay = 0.0
 
 Global UpdateParticles_Time# = 0.0
 
@@ -3140,12 +3141,17 @@ While IsRunning
 	
 	CurTime = MilliSecs()
 	If Framelimit > 0 Then
-	    ;Framelimit
-		Local WaitingTime% = (1000.0 / Framelimit) - (MilliSecs() - LoopDelay)
-		Delay WaitingTime% - 1
-		
-		LoopDelay = MilliSecs()
-		CurTime = LoopDelay
+	    ; Capped to prevent lag spikes as a result of invalid values.
+		AccumulatedLoopDelay = Min(50, AccumulatedLoopDelay + 1000.0 / Framelimit - (CurTime - LoopDelay))
+		If AccumulatedLoopDelay > 0 Then
+			Delay AccumulatedLoopDelay
+			LoopDelay = MilliSecs()
+			AccumulatedLoopDelay = AccumulatedLoopDelay - (LoopDelay - CurTime)
+			CurTime = LoopDelay
+		Else
+			AccumulatedLoopDelay = 0
+			LoopDelay = CurTime
+		EndIf
 	EndIf
 
 	Local ElapsedTime% = CurTime - PrevTime
