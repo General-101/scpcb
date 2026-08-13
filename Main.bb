@@ -9522,6 +9522,8 @@ Function NullGame(playbuttonsfx%=True)
 	NTF_1499Z# = 0.0
 	Wearing1499% = False
 	DeleteChunks()
+
+	Delete Each Dummy1499
 	
 	DeleteElevatorObjects()
 	
