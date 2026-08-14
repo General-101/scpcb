@@ -3227,7 +3227,7 @@ While IsRunning
 		
 		If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And PlayerRoom\RoomTemplate\Name <> "exit1" And (Not IsAnyMenuOpen()) Then 
 			
-			If Rand(1500) = 1 Then
+			If Rand(1500/FPSfactor) = 1 Then
 				For i = 0 To 5
 					If AmbientSFX(i,CurrAmbientSFX)<>0 Then
 						If ChannelPlaying(AmbientSFXCHN)=0 Then FreeSound_Strict AmbientSFX(i,CurrAmbientSFX) : AmbientSFX(i,CurrAmbientSFX) = 0
@@ -3269,7 +3269,7 @@ While IsRunning
 				AmbientSFXCHN = PlaySound2(AmbientSFX(PlayerZone,CurrAmbientSFX), Camera, SoundEmitter)
 			EndIf
 			
-			If Rand(50000) = 3 Then
+			If Rand(50000/FPSfactor) = 1 Then
 				Local RN$ = PlayerRoom\RoomTemplate\Name$
 				If RN$ <> "room860" And RN$ <> "room1123" And RN$ <> "173" And RN$ <> "dimension1499" Then
 					If FPSfactor > 0 Then LightBlink = Rnd(1.0,2.0)
@@ -4784,7 +4784,7 @@ Function MovePlayer()
 	UpdateInfect()
 	
 	If Bloodloss > 0 Then
-		If Injuries > 1.0 And Rnd(200)<Min(Injuries,4.0) Then
+		If Injuries > 1.0 And Rnd(200/FPSfactor)<Min(Injuries,4.0) Then
 			pvt = CreatePivot()
 			PositionEntity pvt, EntityX(Collider)+Rnd(-0.05,0.05),EntityY(Collider)-0.05,EntityZ(Collider)+Rnd(-0.05,0.05)
 			TurnEntity pvt, 90, 0, 0
@@ -4907,7 +4907,7 @@ Function MouseLook()
 		If user_camera_pitch# > 70.0 Then user_camera_pitch# = 70.0
 		If user_camera_pitch# < - 70.0 Then user_camera_pitch# = -70.0
 		
-		RotateEntity Camera, WrapAngle(user_camera_pitch + Rnd(-CameraShake, CameraShake)), WrapAngle(EntityYaw(Collider) + Rnd(-CameraShake, CameraShake)), roll ; Pitch the user;s camera up And down.
+		RotateEntity Camera, WrapAngle(user_camera_pitch + Rnd(-CameraShake*FPSfactor, CameraShake*FPSfactor)), WrapAngle(EntityYaw(Collider) + Rnd(-CameraShake*FPSfactor, CameraShake*FPSfactor)), roll ; Pitch the user;s camera up And down.
 		
 		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
 			If EntityY(Collider)<2000*RoomScale Or EntityY(Collider)>2608*RoomScale Then
@@ -4951,7 +4951,7 @@ Function MouseLook()
 	
 	;pölyhiukkasia
 	If ParticleAmount=2
-		If Rand(35) = 1 Then
+		If Rand(35/FPSfactor) = 1 Then
 			Local pvt% = CreatePivot()
 			PositionEntity(pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
 			RotateEntity(pvt, 0, Rnd(360), 0)
@@ -5012,7 +5012,7 @@ Function MouseLook()
 			Select i
 				Case 0 ;common cold
 					If FPSfactor>0 Then 
-						If Rand(1000)=1 Then
+						If Rand(1000/FPSfactor)=1 Then
 							If CoughCHN = 0 Then
 								CoughCHN = PlaySound_Strict(CoughSFX(Rand(0, 2)))
 							Else
@@ -5022,13 +5022,13 @@ Function MouseLook()
 					EndIf
 					Stamina = Stamina - FPSfactor * 0.3
 				Case 1 ;chicken pox
-					If Rand(9000)=1 And Msg="" Then
+					If Rand(9000/FPSfactor)=1 And Msg="" Then
 						Msg=I_Loc\Message_1025ChickenpoxItchy
 						MsgTimer =70*4
 					EndIf
 				Case 2 ;cancer of the lungs
 					If FPSfactor>0 Then 
-						If Rand(800)=1 Then
+						If Rand(800/FPSfactor)=1 Then
 							If CoughCHN = 0 Then
 								CoughCHN = PlaySound_Strict(CoughSFX(Rand(0, 2)))
 							Else
@@ -5050,7 +5050,7 @@ Function MouseLook()
 					EndIf
 				Case 4 ;asthma
 					If Stamina < 35 Then
-						If Rand(Int(140+Stamina*8))=1 Then
+						If Rand(Int(140+Stamina*8)/FPSfactor)=1 Then
 							If CoughCHN = 0 Then
 								CoughCHN = PlaySound_Strict(CoughSFX(Rand(0, 2)))
 							Else
@@ -10991,7 +10991,7 @@ Function Use427()
 				I_427\SoundCHN[i] = PlaySound_Strict(I_427\Sound[i])
 			EndIf
 		Next
-		If Rnd(200)<2.0 Then
+		If Rnd(200/FPSfactor)<2.0 Then
 			pvt = CreatePivot()
 			PositionEntity pvt, EntityX(Collider)+Rnd(-0.05,0.05),EntityY(Collider)-0.05,EntityZ(Collider)+Rnd(-0.05,0.05)
 			TurnEntity pvt, 90, 0, 0
@@ -11023,7 +11023,7 @@ Function UpdateMTF%()
 	
 	;mtf ei vielä spawnannut, spawnataan jos pelaaja menee tarpeeksi lähelle gate b:tä
 	If MTFtimer = 0 Then
-		If Rand(30)=1 And PlayerRoom\RoomTemplate\Name$ <> "dimension1499" Then
+		If Rand(30/FPSfactor)=1 And PlayerRoom\RoomTemplate\Name$ <> "dimension1499" Then
 			
 			Local entrance.Rooms = Null
 			For r.Rooms = Each Rooms
@@ -11236,7 +11236,7 @@ Function UpdateInfect()
 					EndIf
 					
 					If ParticleAmount>0
-						If Rand(50)=1 Then
+						If Rand(50/FPSfactor)=1 Then
 							p.Particles = CreateParticle(EntityX(PlayerRoom\NPC[0]\Collider),EntityY(PlayerRoom\NPC[0]\Collider),EntityZ(PlayerRoom\NPC[0]\Collider), 5, Rnd(0.05,0.1), 0.15, 200)
 							p\speed = 0.01
 							p\SizeChange = 0.01
