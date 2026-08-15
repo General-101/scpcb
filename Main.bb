@@ -3795,6 +3795,7 @@ Function GetCurrentPlayerArea%()
 	If MainMenuOpen Then Return -1
 	Select PlayerRoom\RoomTemplate\Name
 		Case "173" Return 4
+		Case "room860" If EntityY(Collider,True)>4.0 Then Return 5
 		Case "dimension1499" Return 100
 		Case "pocketdimension" Return 101
 		Case "gatea" Return 102
